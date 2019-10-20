@@ -1,0 +1,50 @@
+.master-div {
+   text-align: center; 
+}
+.input-city-name{
+    width: 50%;
+    text-align: center;
+    min-height: 32px;
+    border-radius: 10px;
+}
+
+.text-class{
+    color: cornflowerblue;
+}
+
+.main-container-div{
+    display: flex;
+}
+
+.container-div-app-data{
+    width: 18%;
+    margin-top: 5%;
+    margin-left: 1%;
+    margin-right: 1%;
+    background-color: aqua;
+    min-height: 250px;
+    border-radius: 8px;
+}
+
+.span-alignment{
+    display: flex;
+    padding-top: 4%;
+    padding-left: 30%;
+}
+
+.span-alignment-humidity{
+    display: flex;
+    padding-top: 4%;
+    padding-left: 24%;
+}
+
+.img-resize{
+    width: 30%;
+    padding-left: 35%;
+    padding-top: 4%;
+    display: flex;
+}
+
+.text-font-style{
+    font-style: italic;
+}

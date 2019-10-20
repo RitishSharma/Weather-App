@@ -1,0 +1,17 @@
+<div class="master-div">
+    <h2 class="text-class text-font-style">Enter City Name to get 5 days Weather Updates</h2>
+    <form>
+        <input type = "text" name = "city" placeholder="Enter City Name" class = "input-city-name text-font-style"
+            [(ngModel)] = "enteredCity" (keyup)="getWeatherData(enteredCity)">
+        <div class="main-container-div" *ngIf="fetchedData.length && fetchedData.length < 6">
+        <div class="container-div-app-data" *ngFor = "let obj of fetchedData">
+            <span class = "text-font-style">19-October</span>
+            <img src="../../assets/images/weather.png" alt="Some Problem with image" class = "img-resize">
+            <span class="span-alignment text-font-style">Min-temp -> 28`C</span>
+            <span class="span-alignment text-font-style">Max-temp -> 36`c</span>
+            <span class="span-alignment text-font-style">Humidity -> 90%</span>
+            <span class="span-alignment-humidity text-font-style">Weather -> overcast clouds</span>
+        </div>
+        </div>
+    </form>
+</div>
