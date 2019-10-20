@@ -29,13 +29,13 @@
 .span-alignment{
     display: flex;
     padding-top: 4%;
-    padding-left: 30%;
+    padding-left: 8%;
 }
 
 .span-alignment-humidity{
     display: flex;
     padding-top: 4%;
-    padding-left: 24%;
+    padding-left: 6%;
 }
 
 .img-resize{
