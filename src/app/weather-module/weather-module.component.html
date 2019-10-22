@@ -2,10 +2,10 @@
     <h2 class="text-class text-font-style">Enter City Name to get 5 days Weather Updates</h2>
     <form>
         <input type = "text" name = "city" placeholder="Enter City Name" class = "input-city-name text-font-style"
-            #searchedCity>
+            #searchedCity >
         <div class="main-container-div" *ngIf="fetchedData.length">
-        <div class="container-div-app-data" *ngFor = "let obj of fetchedData[0] | slice:0:7;">
-            <span class = "text-font-style">{{formattedDate | date : 'MMM d, y'}}</span>
+        <div class="container-div-app-data" *ngFor = "let obj of fetchedData">
+            <span class = "text-font-style">{{obj.dt | date : 'MMM d, y'}}</span>
             <img src="../../assets/images/weather.png" alt="Some Problem with image" class = "img-resize">
             <span class="span-alignment text-font-style">Min-temp -> {{obj.main.temp_min}}`C</span>
             <span class="span-alignment text-font-style">Max-temp -> {{obj.main.temp_max}}`C</span>

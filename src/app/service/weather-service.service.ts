@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { weatherApiUrl, weatherApiKey} from './weather-service.endpoint';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -8,14 +11,16 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 export class weatherService{
     constructor(private httpClient: HttpClient) {}
 
-    weatherApiUrl: string = 'https://samples.openweathermap.org/data/2.5/forecast?q=';
-     APIKEY = "b6907d289e10d714a6e88b30761fae22";
-
-    getData(enteredCity: any) {
+    getData(enteredCity: string) {
         let params = new HttpParams();
-        if (!!enteredCity) {
-            return this.httpClient.get<any>(this.weatherApiUrl + enteredCity + '&appid=' + this.APIKEY);
-        }
-    }
+        params = params.append('APPID',weatherApiKey );
+            return this.httpClient.get<any>(weatherApiUrl + enteredCity, {params: params})
+            .pipe(
+                catchError(this.handleError)
+                );
+             }
+    handleError(error: HttpErrorResponse) {
+        return throwError(error);
+      }
 }
         

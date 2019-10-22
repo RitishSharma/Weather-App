@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, } from '@angular/core';
+import { debounceTime, map, distinctUntilChanged, filter, takeUntil } from "rxjs/operators";
+import { fromEvent, of, Subject } from 'rxjs';
 import { weatherService } from '../service/weather-service.service';
-import { debounceTime, map, distinctUntilChanged, filter } from "rxjs/operators";
-import { fromEvent, of } from 'rxjs';
 
 @Component({
   selector: 'weather-module',
   templateUrl: './weather-module.component.html',
-  styleUrls: ['./wearther-module.component.css']
+  styleUrls: ['./wearther-module.component.css'],
 })
 export class WeatherComponent implements OnInit {
 
@@ -17,13 +17,18 @@ export class WeatherComponent implements OnInit {
   fetchedData = [];
   // global variable to contain formatted date
   formattedDate;
+  // subject to unsubscribe in ngOnDestro
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   ngOnInit(){
-    // initializing form event so as to keep track of input typed after
-      this.getData();
   }
 
-  // calling service on typed city
+  ngAfterViewInit() {
+  // initializing form event so as to keep track of input typed after
+    this.getData();
+  }
+
+  // calling subscription method
     getData() {
       fromEvent(this.searchedCity.nativeElement, 'keyup').pipe(
         map((event: any) => {
@@ -33,37 +38,37 @@ export class WeatherComponent implements OnInit {
         ,debounceTime(400)
         ,distinctUntilChanged()
       ).subscribe((item: string) => {
+        this.subscribeToData(item);
+      })
+    }
+
+// subscription
+    subscribeToData(item: string) {
           this.callWeatherApi(item).subscribe((res) => {
             if (res.length !== 0) {
               this.clearData();
-              this.fetchedData.push(res.list);
-              this.fetchedData[0].forEach( obj => {              
-                this.formatDate(new Date(obj.dt_txt));
-              });
+              this.fetchedData.push(res);
+              console.log(res);
             }
-          }, (err) => {
-            alert(err);
           })
-      })
-    }
+        }
+
 // weather api call
     callWeatherApi(searchItem: string) {
       if (searchItem.length <= 3) {
           this.clearData();
           return of ([]);
       }
-      return this.weatherservice.getData(searchItem);
-    }
-
-    // formatting date
-    formatDate(date: any) {
-      let d = date.getDate();
-      let m = date.getMonth() + 1; //Month from 0 to 11
-      let y = date.getFullYear();
-      return this.formattedDate =  '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+      return this.weatherservice.getData(searchItem).pipe(takeUntil(this.destroy$));
     }
 
     clearData() {
       this.fetchedData = [];
+    }
+
+    ngOnDestroy() {
+      this.destroy$.next(true);
+      // Unsubscribe from the subject
+      this.destroy$.unsubscribe();
     }
 }
